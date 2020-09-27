@@ -8,14 +8,11 @@ cls
 	:: Get the Blink length set by the user in yourblinklength.txt 
 	set /p blinklength=<%~dp0\yourblinklength.txt
 	
-	:: Get the Harmony Wallet address from harmonywallet.txt 
-	set /p harmonywallet=<%~dp0\harmonywallet.txt
-
 	:: Get the Harmony node from harmonynode.txt 
 	set /p harmonynode=<%~dp0\harmonynode.txt 
     
 	:: JSON request body 
-    set jsonbody='{\"jsonrpc\":\"2.0\",\"method\":\"hmy_getBalance\",\"params\":[\"%harmonywallet%\"],\"id\":1}' 
+    set jsonbody='{\"jsonrpc\":\"2.0\",\"method\":\"hmyv2_getLeader\",\"params\":[\"\"],\"id\":1}'
 	
 	
 	
@@ -47,10 +44,8 @@ cls
 
 	
 :: Let the user know that Blinkit is going to start and watch for new blockchain action with these details:
-	echo %Blue%Harmony %Grey%Blink on wallet balance changes%Grey%
+	echo %Blue%Harmony %Grey%Blink on leader adress changes%Grey%
 	echo.
-	echo %Grey%Harmony Wallet: %harmonywallet%
-    echo.
 	  
 :: Let the user know what USB drive is selected	  
 	echo %Grey%Your USB Flash Drive: %flashdrive%
@@ -80,10 +75,9 @@ cls
 
 :: Download data from the Harmony API and save it into a txt file
 	powershell Invoke-RestMethod -ContentType 'application/json' -Method Post -Uri %harmonynode% -Body %jsonbody% -UserAgent "curl" -OutFile  %~dp0\data\downloadeddata.txt"
-	powershell -Command "(gc %~dp0\data\downloadeddata.txt) -replace '.$' | Set-Content %~dp0\data\downloadeddata.txt -Force
-    powershell -Command "(gc %~dp0\data\downloadeddata.txt) -replace '^.................................' | Set-Content %~dp0\data\downloadeddata.txt -Force
-		
-	
+	powershell -Command "(gc %~dp0\data\downloadeddata.txt) -replace '..$' | Set-Content %~dp0\data\downloadeddata.txt -Force
+	powershell -Command "(gc %~dp0\data\downloadeddata.txt) -replace '^..................................' | Set-Content %~dp0\data\downloadeddata.txt -Force
+
 	
 	PING localhost -n 4 >NUL
 	
@@ -91,9 +85,9 @@ cls
 :main   
 :: Download data from Harmony API and save it into a txt file
 	powershell Invoke-RestMethod -ContentType 'application/json' -Method Post -Uri %harmonynode% -Body %jsonbody% -UserAgent "curl" -OutFile  %~dp0\data\downloadeddata2.txt"
-	powershell -Command "(gc %~dp0\data\downloadeddata2.txt) -replace '.$' | Set-Content %~dp0\data\downloadeddata2.txt -Force
-    powershell -Command "(gc %~dp0\data\downloadeddata2.txt) -replace '^.................................' | Set-Content %~dp0\data\downloadeddata2.txt -Force
-	
+	powershell -Command "(gc %~dp0\data\downloadeddata2.txt) -replace '..$' | Set-Content %~dp0\data\downloadeddata2.txt -Force
+	powershell -Command "(gc %~dp0\data\downloadeddata2.txt) -replace '^..................................' | Set-Content %~dp0\data\downloadeddata2.txt -Force
+
 	
 	
 	PING localhost -n 4 >NUL
@@ -109,20 +103,17 @@ cls
 :: let the user know the program is running by displaying the text:  
 	echo.
 	echo %White%Blinkit is running... %Grey%
-	
-	:: Display the ONE balance and make the ONE balance readable 	
-	set /p coins=<%~dp0\data\downloadeddata2.txt
-	powershell -Command "(gc %~dp0\data\downloadeddata2.txt) -replace '..................$' | Set-Content %~dp0\data\downloadeddata2.txt -Force
-	set /p wholecoins=<%~dp0\data\downloadeddata2.txt
-	echo Available balance (ONE): %wholecoins%.%coins:~-18% 
-    
-	
+	echo Current leader is:
+	type %~dp0\data\downloadeddata2.txt
+
+  
 	
 :: Download data from Harmony API and save it into a txt file
-	 powershell Invoke-RestMethod -ContentType 'application/json' -Method Post -Uri %harmonynode% -Body %jsonbody% -UserAgent "curl" -OutFile  %~dp0\data\downloadeddata2.txt"
-	 powershell -Command "(gc %~dp0\data\downloadeddata2.txt) -replace '.$' | Set-Content %~dp0\data\downloadeddata2.txt -Force
-     powershell -Command "(gc %~dp0\data\downloadeddata2.txt) -replace '^.................................' | Set-Content %~dp0\data\downloadeddata2.txt -Force
+	powershell Invoke-RestMethod -ContentType 'application/json' -Method Post -Uri %harmonynode% -Body %jsonbody% -UserAgent "curl" -OutFile  %~dp0\data\downloadeddata2.txt"
+	powershell -Command "(gc %~dp0\data\downloadeddata2.txt) -replace '..$' | Set-Content %~dp0\data\downloadeddata2.txt -Force
+	powershell -Command "(gc %~dp0\data\downloadeddata2.txt) -replace '^..................................' | Set-Content %~dp0\data\downloadeddata2.txt -Force
 
+	 
 	 
 	 :: 7 seconds silent delay (works by pinging local host)
 	 PING localhost -n 7 >NUL
@@ -135,15 +126,15 @@ cls
 
 :: Let the user know, there is a new action detected by displaying the text:   
 	echo.
-	echo %White%Blinkit new action detected for %Blue%Harmony %White%wallet: 
-	echo %Grey%%harmonywallet% 
+	echo %White%Blinkit change detected %Blue%Harmony %White%leader wallet changed: 
 	echo %Green%Light blink! %White% 
+    echo.
+	echo New leader is:
+	powershell -Command "(gc %~dp0\data\downloadeddata2.txt) -replace '..$' | Set-Content %~dp0\data\downloadeddata2.txt -Force
+	powershell -Command "(gc %~dp0\data\downloadeddata2.txt) -replace '^..................................' | Set-Content %~dp0\data\downloadeddata2.txt -Force
+
+	type %~dp0\data\downloadeddata2.txt	
 	
-	:: Display the ONE balance and make the ONE balance readable 	
-	set /p coins=<%~dp0\data\downloadeddata2.txt
-	powershell -Command "(gc %~dp0\data\downloadeddata2.txt) -replace '..................$' | Set-Content %~dp0\data\downloadeddata2.txt -Force
-	set /p wholecoins=<%~dp0\data\downloadeddata2.txt
-	echo %Grey%Available balance (ONE): %wholecoins%.%coins:~-18% 	
 
 :: Blink the LED by copying the LED file to the flash drive 
     	
@@ -164,10 +155,10 @@ cls
 
 
 :: Download new data from Harmony API and save it into a txt file
-	 powershell Invoke-RestMethod -ContentType 'application/json' -Method Post -Uri %harmonynode% -Body %jsonbody% -UserAgent "curl" -OutFile  %~dp0\data\downloadeddata.txt"
-	 powershell -Command "(gc %~dp0\data\downloadeddata.txt) -replace '.$' | Set-Content %~dp0\data\downloadeddata.txt -Force
-     powershell -Command "(gc %~dp0\data\downloadeddata.txt) -replace '^.................................' | Set-Content %~dp0\data\downloadeddata.txt -Force
-	 
+	powershell Invoke-RestMethod -ContentType 'application/json' -Method Post -Uri %harmonynode% -Body %jsonbody% -UserAgent "curl" -OutFile  %~dp0\data\downloadeddata.txt"
+	powershell -Command "(gc %~dp0\data\downloadeddata.txt) -replace '..$' | Set-Content %~dp0\data\downloadeddata.txt -Force
+	powershell -Command "(gc %~dp0\data\downloadeddata.txt) -replace '^..................................' | Set-Content %~dp0\data\downloadeddata.txt -Force
+
 	 
 	 PING localhost -n 5 >NUL
 

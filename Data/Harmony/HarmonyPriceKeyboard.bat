@@ -5,7 +5,6 @@ cls
     :: Set the one price
 	set /p oneprice=<%~dp0\data\harmonyonepricestriped.txt 
 
-
 	:: Get the flashdrive letter set by the user in yourusbdrive.txt
 	set /p flashdrive=<%~dp0\yourusbdrive.txt
 	

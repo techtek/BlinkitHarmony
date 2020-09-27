@@ -4,7 +4,7 @@
 |__) |___ | | \| |  \ |  |    
   
 ----------------------------------------------------------------------                                                
-Blinkit | Blink your devices on blockchain actions | Version 3.8 
+Blinkit | Blink your devices on blockchain actions | Version 4.0
 Made by Techtek, chat and support https://discord.gg/73h8XqP
 ----------------------------------------------------------------------
 
