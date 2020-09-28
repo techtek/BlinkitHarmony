@@ -15,7 +15,7 @@ cls
 	set /p harmonynode=<%~dp0\harmonynode.txt 
     
 	:: JSON request body 
-    set jsonbody='{\"jsonrpc\":\"2.0\",\"method\":\"hmy_getBalance\",\"params\":[\"%harmonywallet%\"],\"id\":1}' 
+    set jsonbody='{\"jsonrpc\":\"2.0\",\"method\":\"hmyv2_getBalance\",\"params\":[\"%harmonywallet%\"],\"id\":1}' 
 	
 	
 	
